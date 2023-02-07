@@ -1,11 +1,11 @@
 # Fdb version 3
-["dvipdf"] 1675692143 "out/fujiwara_robomech.dvi" "out/fujiwara_robomech.pdf" "out/fujiwara_robomech" 1675692143
-  "out/fujiwara_robomech.dvi" 1675692143 4724 06e7e1041a8dd71eecda29af2e45b7c1 "latex"
+["dvipdf"] 1675760396 "out/fujiwara_robomech.dvi" "out/fujiwara_robomech.pdf" "out/fujiwara_robomech" 1675760396
+  "out/fujiwara_robomech.dvi" 1675760396 5188 226cbc4213351544dd0746175a517107 "latex"
   (generated)
   "out/fujiwara_robomech.pdf"
-["latex"] 1675692143 "/home/fmasa/mech_tex/fujiwara_robomech.tex" "out/fujiwara_robomech.dvi" "fujiwara_robomech" 1675692143
+["latex"] 1675760396 "/home/fmasa/mech_tex/fujiwara_robomech.tex" "out/fujiwara_robomech.dvi" "fujiwara_robomech" 1675760396
   "/etc/texmf/web2c/texmf.cnf" 1669899351 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/fmasa/mech_tex/fujiwara_robomech.tex" 1675692143 8127 de1672abadb083f36c95888db5fccc71 ""
+  "/home/fmasa/mech_tex/fujiwara_robomech.tex" 1675760396 8465 f002e520896e90741b7d428d3bfdc4de ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm" 1463434352 1196 5981e79c37b2cfd27b3612a6783cd4b6 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth9.tfm" 1463434352 1196 b274fc006918dea9e5263e2117f4bddb ""
@@ -38,10 +38,10 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/web2c/eptex/platex.fmt" 1669899416 10614978 8e113f52ef791f7608f6049f580d5cac ""
-  "fujiwara_robomech.tex" 1675692143 8127 de1672abadb083f36c95888db5fccc71 ""
-  "out/fujiwara_robomech.aux" 1675692143 219 d819bf85c4c19744ac7a651b280476b7 "latex"
+  "fujiwara_robomech.tex" 1675760396 8465 f002e520896e90741b7d428d3bfdc4de ""
+  "out/fujiwara_robomech.aux" 1675760396 255 d3328c767c1cecd3d55ac9db36021eb1 "latex"
   "robomech.sty" 1671778192 10293 8982dbc33bdad8ecf621cef65d449943 ""
   (generated)
   "out/fujiwara_robomech.aux"
-  "out/fujiwara_robomech.dvi"
   "out/fujiwara_robomech.log"
+  "out/fujiwara_robomech.dvi"
