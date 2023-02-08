@@ -55,7 +55,7 @@ a path, and then verify whether the system can select a path by experiments usin
 カメラ画像とステアリング角度に, 条件を加えて学習を行う条件付き模倣学習の研究は, 現在までにいくつか行われている. Felipeら\cite{felipe}は前方カメラ画像, ステアリング角度, 角速度と「continue」, 「left」, 「straight」, 「right」からなるコマンドを入力としたネットワークを用いて模倣学習を行った. そして, 実環境と都市環境のシミュレータ上で, 模倣学習のテスト時においてもコマンドによって制御可能であることを確認している. また, Hawkeら\cite{hawke}は3つの前方カメラ画像と「go straight」, 「turn left」, 「turn right」からなるコマンドを入力とする構造のモデルを用いて, 実環境での複雑な都市環境というシナリオで, 意思決定が可能なモデルをわずか30時間の学習データで学習可能であることを示している.
 \par
 そこで本稿では, 従来から提案する経路追従行動を模倣する手法に対して, 条件を加えることで経路を選択する機能の追加を試みる. これにより, 模倣学習のテスト時においても, \reffig{fig: fig1}のような分岐路で, 
-「直進」, 「左折」などのコマンドによる制御で任意の経路へ移動を可能にすることを目指す.
+「直進」, 「左折」などのコマンドによる制御で任意の経路への移動を可能にすることを目指す.
 
 \begin{figure}[h]
  \centering
@@ -69,18 +69,82 @@ a path, and then verify whether the system can select a path by experiments usin
 岡田らの従来手法に関して紹介する. \reffig{fig: fig2}に経路追従行動を視覚に基づいてオンラインで模倣するシステムを示す. 手法は機械学習により, 学習器の訓練を行う「学習フェーズ」と訓練した結果を検証する「テストフェーズ」に分かれる.
 
 \subsection{学習フェーズ}
-学習フェーズは, 模倣学習によって学習器の訓練を行うフェーズである. 測域センサとオドメトリを入力とする地図を用いたルールベース制御器で自律走行する. この経路追従行動を, カメラ画像を用いたend-to-endで模倣学習する.
+学習フェーズは, 模倣学習によって学習器の訓練を行うフェーズである. 測域センサとオドメトリを入力とする地図を用いたルールベース制御器で自律走行する. この経路追従行動を, カメラ画像を用いたend-to-endで模倣学習する. 前報\cite{okada2}で述べたように, 岡田らの手法ではデータセットの収集方法にいくつかの種類がある. 本稿では, その中で最も経路追従の成功率が高い手法を用いてロボットに模倣学習をさせる.
 
 \subsection{テストフェーズ}
-テストフェーズは, 訓練後 の学習結果を評価するフェーズである. 学習器にカメ ラ画像を入力し, 出力されるヨー方向の角速度を用い て自律走行する.
+テストフェーズは, 訓練後の学習結果を評価するフェーズである. 学習器にカメラ画像を入力し, 出力されるヨー方向の角速度を用いて自律走行する.
+
+\begin{figure}[h]
+  \centering
+   \includegraphics[width=85mm]{system.png}
+   \vspace*{-4mm}
+   \caption{Imitation learning system of learning phase}
+   \label{fig: fig2}
+ \end{figure}
+
+\section{経路選択機能の追加}
+経路選択機能の追加を目的として, データセットと学習器の入力へ, 目標とする進行方向(以下, 「目標方向」と称する)を追加する. なお, 追加した要素以外は従来手法と同様である. \reffig{fig: fig3}に提案手法のシステムを示す. 学習フェーズでは, 地図を用いたルールベース制御器で自律走行しながら, 角速度, カメラ画像に新たに目標方向をデータセットに加える. テストフェーズでは, 学習器にカメラ画像に加えて目標方向を外部から入力する. 本稿では議論しないが, 最終的に目的地までカメラ画像のみで自律走行させることを目標としているため, 目標方向を自動的に作成する仕組みが必要となる. これに関しては, カメラ画像からトポロジカルマップのどのノード上に到達したかを判定し, 目標方向を自動的に切り替えるパッケージを作成している.
 
 \begin{figure}[h]
   \centering
    \includegraphics[width=85mm]{system2.png}
    \vspace*{-4mm}
-   \caption{Imitation learning system}
-   \label{fig: fig2}
+   \caption{Imitation learning system of test phase}
+   \label{fig: fig3}
  \end{figure}
+
+\section{ネットワークとデータ形式}
+
+
+\begin{figure}[h]
+  \centering
+   \includegraphics[width=85mm]{network.png}
+   \vspace*{-4mm}
+   \caption{Structure of network}
+   \label{fig: fig4}
+ \end{figure}
+
+ \begin{table}[h]
+  \caption{Target direction and data for imitation learning}
+  \label{tbl: table1}
+  \centering
+ %  \footnotesize
+  \vspace{2mm}
+  \begin{tabular}{|c|c|}
+   \hline
+   Input data & 
+   \begin{tabular}{|c|}
+    Image (64×48 pixels, RGB channels), \\ Target direction
+   \end{tabular}
+   \hline
+  \end{tabular}
+ \end{table}
+
+\begin{table}[h]
+ \caption{Target direction and data for imitation learning}
+ \label{tbl: table2}
+ \centering
+%  \footnotesize
+ \vspace{2mm}
+ \begin{tabular}{|c|c|}
+  \hline
+	Target direction & Data \\\hline
+  Go straight & [1, 0, 0] \\\hline
+  Turn left & [0, 1, 0] \\\hline
+  Turn right & [0, 0, 1] \\
+  \hline
+ \end{tabular}
+\end{table}
+
+
+ \begin{figure}[h]
+  \centering
+   \includegraphics[width=75mm]{direction.png}
+   \vspace*{-4mm}
+   \caption{Target direction}
+   \label{fig: fig5}
+ \end{figure}
+
 
 % 本文：明朝体・9pt（欧文Times New Roman, 9pt）、文字間隔は１行26文字程度、行間隔は4.2mm程度にして下さ	い。
 

@@ -1,11 +1,11 @@
 # Fdb version 3
-["dvipdf"] 1675851198 "out/fujiwara_robomech.dvi" "out/fujiwara_robomech.pdf" "out/fujiwara_robomech" 1675851199
-  "out/fujiwara_robomech.dvi" 1675851198 11892 9203b41f6a68aa718a0cc508bc5af2f0 "latex"
+["dvipdf"] 1675854824 "out/fujiwara_robomech.dvi" "out/fujiwara_robomech.pdf" "out/fujiwara_robomech" 1675854825
+  "out/fujiwara_robomech.dvi" 1675854824 15248 0e4cb4207b2007549b8f9368cba24fc9 "latex"
   (generated)
   "out/fujiwara_robomech.pdf"
-["latex"] 1675851198 "/home/fmasa/mech_tex/fujiwara_robomech.tex" "out/fujiwara_robomech.dvi" "fujiwara_robomech" 1675851199
+["latex"] 1675854824 "/home/fmasa/mech_tex/fujiwara_robomech.tex" "out/fujiwara_robomech.dvi" "fujiwara_robomech" 1675854825
   "/etc/texmf/web2c/texmf.cnf" 1669899351 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/fmasa/mech_tex/fujiwara_robomech.tex" 1675851197 13071 b5332565507d259174e2d669d8c43ac7 ""
+  "/home/fmasa/mech_tex/fujiwara_robomech.tex" 1675854824 15597 76b909713cc0ca283f277abf2c2c1d60 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth10.tfm" 1463434352 1196 5981e79c37b2cfd27b3612a6783cd4b6 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth9.tfm" 1463434352 1196 b274fc006918dea9e5263e2117f4bddb ""
@@ -38,12 +38,15 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/web2c/eptex/platex.fmt" 1669899416 10614978 8e113f52ef791f7608f6049f580d5cac ""
-  "fujiwara_robomech.tex" 1675851197 13071 b5332565507d259174e2d669d8c43ac7 ""
-  "out/fujiwara_robomech.aux" 1675851198 1051 23a00e7ea812f7e704ec6da4a02a8f2b "latex"
+  "direction.png" 1675854077 28145 2e104d2855447ec4c68a1add004f18b4 ""
+  "fujiwara_robomech.tex" 1675854824 15597 76b909713cc0ca283f277abf2c2c1d60 ""
+  "network.png" 1675853732 43224 b20b1f606d45a3cdc73a21f40ce706f8 ""
+  "out/fujiwara_robomech.aux" 1675854824 2145 d03574311709e6d1b76e27684133c71d "latex"
   "road.png" 1675849682 165308 7c1102a439cb21c10676e4e7611d5cb2 ""
   "robomech.sty" 1671778192 10293 8982dbc33bdad8ecf621cef65d449943 ""
+  "system.png" 1675851532 90003 e980b8251ccbf87ecaaf6930697606af ""
   "system2.png" 1675850691 109066 0bb085ce5ae935c667ec9359f2be54d9 ""
   (generated)
+  "out/fujiwara_robomech.log"
   "out/fujiwara_robomech.aux"
   "out/fujiwara_robomech.dvi"
-  "out/fujiwara_robomech.log"
