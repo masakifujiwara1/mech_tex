@@ -24,8 +24,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
-INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/dvips.def
-INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/dvips.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/dvipdfmx.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/dvipdfmx.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 INPUT out/fujiwara_robomech.aux
@@ -51,6 +51,10 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/goth9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbxti10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
+INPUT road.png
+INPUT extractbb -B cropbox -O road.png
+INPUT system2.png
+INPUT extractbb -B cropbox -O system2.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/tmin8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/ptex-fonts/standard/min8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm

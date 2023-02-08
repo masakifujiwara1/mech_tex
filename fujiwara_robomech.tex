@@ -1,6 +1,6 @@
 \documentclass{jarticle}
 \usepackage{robomech}
-\usepackage{graphicx}
+\usepackage[dvipdfmx]{graphicx}
 
 \begin{document}
 \makeatletter
@@ -13,7 +13,7 @@ behavior by end-to-end\\ learning of vision and action}
 \author{
 \begin{tabular}{ll}
  \hspace{1zw}○学\hspace{1zw} 藤原柾(千葉工大)& \hspace{1zw} 馬場琉生(千葉工大)\\
-%  \hspace{1zw}学\hspace{1zw} 髙橋佑樹(千葉工大)& \hspace{1zw} 春山健太(千葉工大)\\
+%  \hspace{1zw}髙橋佑樹(千葉工大)& \hspace{1zw} 春山健太(千葉工大)\\
  \hspace{2zw}正\hspace{1zw}上田隆一(千葉工大)& 正\hspace{1zw}林原靖男(千葉工大)\\
  % ※協賛・後援団体の会員資格で発表される場合は「正・学」は不要です。
  \end{tabular}
@@ -46,7 +46,42 @@ a path, and then verify whether the system can select a path by experiments usin
 
 \small
 \section{緒言}%===========================
-我々は, 入力データから出力を直接生成するend-to-end学習により, 経路追従行動をロボットの視覚に当たるカメラ画像に基づいてオンラインで模倣する手法を提案し, 有効性を実験により検証してきた\cite{okada1}\cite{okada2}（以下, 「従来手法」と称する）. 加えて, 
+我々は, 入力データから出力を直接生成するend-to-end学習により, 経路追従行動をロボットの視覚に当たるカメラ画像に基づいてオンラインで模倣する手法を提案し, 有効性を実験により検証してきた\cite{okada1}\cite{okada2}（以下, 「従来手法」と称する）. 加えて, この岡田らの従来手法に経路を選択する機能の追加を提案し, シミュレータ上での実験により, 有効性を検証してきた\cite{mech}. 本稿では, 経路選択機能に関する実験をシミュレータ上から実環境に移す際に, 問題となった学習時間の長さについて, 2つのアプローチにより解決を図る. さらに, 実環境において経路選択機能の有効性を検証することを目的とする.
+\par
+従来手法は, 測域センサやオドメトリなどを入力とする地図を用いたルールベース制御器による走行を模倣学習し, 似た行動を画像を用いて行う手法である. なお, 地図を用いたルールベース制御器は, ROS Navigation\_stackへ目標位置(waypoint)の指示を行うwaypoint\_navを組み合わせたものである. この手法は, 多くの研究\cite{bojarski}\cite{moridian}\cite{hawke}が人間のドライバーが操作するステアリング角度と前方カメラ画像を用いて模倣学習を行っていたのに対して, オンラインで自動的にデータセットを収集して模倣学習を行う点で異なっているといえる.
+\par
+ただし, この手法は学習を行った一定の経路を走行できるが, 目的地に対して経路を動的に選択して走行することはできない. それをするためには, ネットワークの入力に新たな要素の追加が必要となる. そのため, ネットワークへ新たな要素を追加し, \reffig{fig: fig1}のような分岐路において, 任意の経路を選択する機能の追加を検討した.
+\par
+カメラ画像とステアリング角度に, 条件を加えて学習を行う条件付き模倣学習の研究は, 現在までにいくつか行われている. Felipeら\cite{felipe}は前方カメラ画像, ステアリング角度, 角速度と「continue」, 「left」, 「straight」, 「right」からなるコマンドを入力としたネットワークを用いて模倣学習を行った. そして, 実環境と都市環境のシミュレータ上で, 模倣学習のテスト時においてもコマンドによって制御可能であることを確認している. また, Hawkeら\cite{hawke}は3つの前方カメラ画像と「go straight」, 「turn left」, 「turn right」からなるコマンドを入力とする構造のモデルを用いて, 実環境での複雑な都市環境というシナリオで, 意思決定が可能なモデルをわずか30時間の学習データで学習可能であることを示している.
+\par
+そこで本稿では, 従来から提案する経路追従行動を模倣する手法に対して, 条件を加えることで経路を選択する機能の追加を試みる. これにより, 模倣学習のテスト時においても, \reffig{fig: fig1}のような分岐路で, 
+「直進」, 「左折」などのコマンドによる制御で任意の経路へ移動を可能にすることを目指す.
+
+\begin{figure}[h]
+ \centering
+  \includegraphics[height=30mm]{road.png}
+  \vspace*{-4mm}
+  \caption{A fork in the road where the direction of moving is not unique}
+  \label{fig: fig1}
+\end{figure}
+
+\section{従来手法}
+岡田らの従来手法に関して紹介する. \reffig{fig: fig2}に経路追従行動を視覚に基づいてオンラインで模倣するシステムを示す. 手法は機械学習により, 学習器の訓練を行う「学習フェーズ」と訓練した結果を検証する「テストフェーズ」に分かれる.
+
+\subsection{学習フェーズ}
+学習フェーズは, 模倣学習によって学習器の訓練を行うフェーズである. 測域センサとオドメトリを入力とする地図を用いたルールベース制御器で自律走行する. この経路追従行動を, カメラ画像を用いたend-to-endで模倣学習する.
+
+\subsection{テストフェーズ}
+テストフェーズは, 訓練後 の学習結果を評価するフェーズである. 学習器にカメ ラ画像を入力し, 出力されるヨー方向の角速度を用い て自律走行する.
+
+\begin{figure}[h]
+  \centering
+   \includegraphics[width=85mm]{system2.png}
+   \vspace*{-4mm}
+   \caption{Imitation learning system}
+   \label{fig: fig2}
+ \end{figure}
+
 % 本文：明朝体・9pt（欧文Times New Roman, 9pt）、文字間隔は１行26文字程度、行間隔は4.2mm程度にして下さ	い。
 
 % \subsection{論文作成に関する注意事項を以下に示します。（中見出し：ゴシック体・9pt・強調文字・左寄せ）}%-----------
@@ -128,6 +163,9 @@ a path, and then verify whether the system can select a path by experiments usin
 
 \bibitem{bojarski}
 Bojarski, Mariusz,et al. “End to end learning for self- driving cars.”arXiv:1604.07316(2016)
+
+\bibitem{moridian}
+Moridian, Barzin, Anurag Kamal, and Nina Mahmoudian. "Learning navigation tasks from demonstration for semi- autonomous remote operation of mobile robots." 2018 IEEE International Symposium on Safety, Security, and Rescue Robotics (SSRR). IEEE, (2018)
 
 \bibitem{felipe}
 Felipe Codevilla et al.“end-to-end driving via conditional imitation learning.” arXiv: 1710.02410(2018)
