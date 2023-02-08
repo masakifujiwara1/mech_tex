@@ -81,5 +81,13 @@ INPUT tsudanuma2.png
 INPUT extractbb -B cropbox -O tsudanuma2.png
 INPUT 60000step_real2.png
 INPUT extractbb -B cropbox -O 60000step_real2.png
+INPUT 10000step.png
+INPUT extractbb -B cropbox -O 10000step.png
+INPUT hist.png
+INPUT extractbb -B cropbox -O hist.png
+INPUT 10000step_act1.0.png
+INPUT extractbb -B cropbox -O 10000step_act1.0.png
+INPUT 3action3.png
+INPUT extractbb -B cropbox -O 3action3.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
 INPUT out/fujiwara_robomech.aux
