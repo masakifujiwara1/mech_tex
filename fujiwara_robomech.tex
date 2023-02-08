@@ -175,7 +175,7 @@ a path, and then verify whether the system can select a path by experiments usin
  \end{figure}
 
  \subsection{実験方法}
- \reffig{fig: fig7}に示すような A,B の三叉路で全ての侵入方向と抜け出す経路を含めるように, 文献\cite{mech}と同様の経路を繰り返し走行させる. 学習を60000step実行後, テストフェーズに移行する. テストフェーズでは, 学習フェーズと同様の経路を, 目標方向による制御によって正しく走行できるか評価する.
+ \reffig{fig: fig7}に示すような A,B の三叉路で全ての侵入方向と抜け出す経路を含めるように, 文献\cite{mech}と同様の経路を繰り返し走行させる. 学習を60000step実行後, テストフェーズに移行する. テストフェーズでは, 学習フェーズと同様の経路を, 目標方向による制御によって正しく走行できるか評価する. しかし, 実験を行ったのは1回のみである. 実験が1回飲みなのは, 学習時間の長さが問題になったためである. 具体的には, 実験におよそ7時間を要し, バッテリなどの関係で1日に1, 2時間が限界であったため, 1回の実験に1週間かけて行う必要があった.
 
  \begin{figure}[h]
   \centering
@@ -185,6 +185,20 @@ a path, and then verify whether the system can select a path by experiments usin
    \label{fig: fig7}
  \end{figure}
 
+\subsection{実験結果}
+実験結果を\reffig{fig: fig8}に示す. この図は, それぞれの侵入方向に対して正しい経路を選択し, 走行できた回数を表している. 目標方向に従って9/12回(75\%), 正しい経路を選択する様子が見られた.
+
+\begin{figure}[h]
+  \centering
+   \includegraphics[width=85mm]{60000step_real2.png}
+   \vspace*{-4mm}
+   \caption{Number of times a correct path was selected}
+   \label{fig: fig8}
+ \end{figure}
+
+\section{学習時間の短縮化の提案}
+\subsection{問題}
+前章で述べたように, シミュレータ上での実験により提案手法が有効だと
 
 % 本文：明朝体・9pt（欧文Times New Roman, 9pt）、文字間隔は１行26文字程度、行間隔は4.2mm程度にして下さ	い。
 
@@ -281,10 +295,13 @@ Felipe Codevilla et al.“end-to-end driving via conditional imitation learning.
 Jeffrey hawke et al. ”urban driving with conditional imitation learning”. arxiv: 1912.00177, 2019.
 
 \bibitem{nav}
-ros-planning, navigation レポジトリ. \url{https://github.com/ros-planning/navigation.}
+ros-planning, navigation レポジトリ. \\\url{https://github.com/ros-planning/navigation.}\\
+(最終閲覧日：2月9日)
 
 \bibitem{waypoint}
-waypoint\_nav レポジトリ. \url{https://github.com/open-rdc/waypoint_nav.git.}
+waypoint\_nav レポジトリ. \\\url{https://github.com/open-rdc/waypoint_nav.git.}\\
+(最終閲覧日：2月9日)
+
 
 \end{thebibliography}
 

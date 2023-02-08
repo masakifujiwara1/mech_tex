@@ -79,5 +79,7 @@ INPUT gamma3.png
 INPUT extractbb -B cropbox -O gamma3.png
 INPUT tsudanuma2.png
 INPUT extractbb -B cropbox -O tsudanuma2.png
+INPUT 60000step_real2.png
+INPUT extractbb -B cropbox -O 60000step_real2.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
 INPUT out/fujiwara_robomech.aux
