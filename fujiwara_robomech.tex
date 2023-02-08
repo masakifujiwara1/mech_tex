@@ -1,6 +1,8 @@
 \documentclass{jarticle}
 \usepackage{robomech}
 \usepackage[dvipdfmx]{graphicx}
+\usepackage{here}
+\usepackage{url}
 
 \begin{document}
 \makeatletter
@@ -48,7 +50,7 @@ a path, and then verify whether the system can select a path by experiments usin
 \section{緒言}%===========================
 我々は, 入力データから出力を直接生成するend-to-end学習により, 経路追従行動をロボットの視覚に当たるカメラ画像に基づいてオンラインで模倣する手法を提案し, 有効性を実験により検証してきた\cite{okada1}\cite{okada2}（以下, 「従来手法」と称する）. 加えて, この岡田らの従来手法に経路を選択する機能の追加を提案し, シミュレータ上での実験により, 有効性を検証してきた\cite{mech}. 本稿では, 経路選択機能に関する実験をシミュレータ上から実環境に移す際に, 問題となった学習時間の長さについて, 2つのアプローチにより解決を図る. さらに, 実環境において経路選択機能の有効性を検証することを目的とする.
 \par
-従来手法は, 測域センサやオドメトリなどを入力とする地図を用いたルールベース制御器による走行を模倣学習し, 似た行動を画像を用いて行う手法である. なお, 地図を用いたルールベース制御器は, ROS Navigation\_stackへ目標位置(waypoint)の指示を行うwaypoint\_navを組み合わせたものである. この手法は, 多くの研究\cite{bojarski}\cite{moridian}\cite{hawke}が人間のドライバーが操作するステアリング角度と前方カメラ画像を用いて模倣学習を行っていたのに対して, オンラインで自動的にデータセットを収集して模倣学習を行う点で異なっているといえる.
+従来手法は, 測域センサやオドメトリなどを入力とする地図を用いたルールベース制御器による走行を模倣学習し, 似た行動を画像を用いて行う手法である. なお, 地図を用いたルールベース制御器は, ROS Navigation\_stack\cite{nav}へ目標位置(waypoint)の指示を行うwaypoint\_nav\cite{waypoint}を組み合わせたものである. この手法は, 多くの研究\cite{bojarski}\cite{moridian}\cite{hawke}が人間のドライバーが操作するステアリング角度と前方カメラ画像を用いて模倣学習を行っていたのに対して, オンラインで自動的にデータセットを収集して模倣学習を行う点で異なっているといえる.
 \par
 ただし, この手法は学習を行った一定の経路を走行できるが, 目的地に対して経路を動的に選択して走行することはできない. それをするためには, ネットワークの入力に新たな要素の追加が必要となる. そのため, ネットワークへ新たな要素を追加し, \reffig{fig: fig1}のような分岐路において, 任意の経路を選択する機能の追加を検討した.
 \par
@@ -56,6 +58,8 @@ a path, and then verify whether the system can select a path by experiments usin
 \par
 そこで本稿では, 従来から提案する経路追従行動を模倣する手法に対して, 条件を加えることで経路を選択する機能の追加を試みる. これにより, 模倣学習のテスト時においても, \reffig{fig: fig1}のような分岐路で, 
 「直進」, 「左折」などのコマンドによる制御で任意の経路への移動を可能にすることを目指す.
+
+\vspace{3mm}
 
 \begin{figure}[h]
  \centering
@@ -94,7 +98,9 @@ a path, and then verify whether the system can select a path by experiments usin
  \end{figure}
 
 \section{ネットワークとデータ形式}
-
+\reffig{fig: fig4}に経路選択機能を追加したネットワーク, \reftab{tbl: table1}にハイパーパラメータを示す. 
+先行研究に倣って, 前報で用いたネットワークの出力部へ2つの層を追加した. この層に目標方向として, \reftab{tbl: table2}のワンホットベクトルで表されるデータを入力する. なお, 文献\cite{mech}では「Continue」, 「Go straight」, 「Turn left」, 「Turn right」からなる4つのコマンドを用いていたが, 「Continue」と「Go straight」のコマンドに対応する行動がほぼ同一であったため, 本稿ではコマンドを1つ減らし, 3コマンドとしている. 
+% \reffig{fig: fig5}はそれぞれの進行方向を示している.
 
 \begin{figure}[h]
   \centering
@@ -108,23 +114,31 @@ a path, and then verify whether the system can select a path by experiments usin
   \caption{Target direction and data for imitation learning}
   \label{tbl: table1}
   \centering
- %  \footnotesize
+  \footnotesize
   \vspace{2mm}
   \begin{tabular}{|c|c|}
    \hline
    Input data & 
-   \begin{tabular}{|c|}
+   \begin{tabular}{c}
     Image (64×48 pixels, RGB channels), \\ Target direction
    \end{tabular}
+   \\\hline
+   Optimizer & 
+   \begin{tabular}{c}
+   Adam(alpha = 0.001, beta1 = 0.9, \\beta2 = 0.999, eps = 1$e^{-2}$) 
+  \end{tabular}
+  \\\hline 
+  Loss function & Softmax-cross-entropy\\\hline
+  Output data & Angular velocity\\
    \hline
   \end{tabular}
- \end{table}
+\end{table}
 
-\begin{table}[h]
+\begin{table}[H]
  \caption{Target direction and data for imitation learning}
  \label{tbl: table2}
  \centering
-%  \footnotesize
+ \footnotesize
  \vspace{2mm}
  \begin{tabular}{|c|c|}
   \hline
@@ -136,15 +150,28 @@ a path, and then verify whether the system can select a path by experiments usin
  \end{tabular}
 \end{table}
 
+% \begin{figure}[h]
+%   \centering
+%   \includegraphics[width=75mm]{direction.png}
+%   \vspace*{-4mm}
+%   \caption{Target direction}
+%   \label{fig: fig5}
+% \end{figure}
 
- \begin{figure}[h]
+% \newpage
+\section{提案手法の検証実験}
+構築したシステムで, 目標方向に従って経路を選択できることを実環境の実験により確認する. 
+\subsection{実験装置}
+% \subsubsection{コンピュータ}
+ロボットは, \reffig{fig: fig6}に示すような3つのカメラを搭載したロボットを用いる.
+
+\begin{figure}[h]
   \centering
-   \includegraphics[width=75mm]{direction.png}
+   \includegraphics[width=50mm]{gamma3.png}
    \vspace*{-4mm}
-   \caption{Target direction}
-   \label{fig: fig5}
+   \caption{Experimental setup}
+   \label{fig: fig6}
  \end{figure}
-
 
 % 本文：明朝体・9pt（欧文Times New Roman, 9pt）、文字間隔は１行26文字程度、行間隔は4.2mm程度にして下さ	い。
 
@@ -239,6 +266,12 @@ Felipe Codevilla et al.“end-to-end driving via conditional imitation learning.
 
 \bibitem{hawke}
 Jeffrey hawke et al. ”urban driving with conditional imitation learning”. arxiv: 1912.00177, 2019.
+
+\bibitem{nav}
+ros-planning, navigation レポジトリ. \url{https://github.com/ros-planning/navigation.}
+
+\bibitem{waypoint}
+waypoint\_nav レポジトリ. \url{https://github.com/open-rdc/waypoint_nav.git.}
 
 \end{thebibliography}
 
