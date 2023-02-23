@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.12.1)  9 FEB 2023 05:07
+This is e-pTeX, Version 3.14159265-p3.8.2-190908-2.6 (utf8.euc) (TeX Live 2019/Debian) (preloaded format=platex 2022.12.1)  24 FEB 2023 07:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -62,7 +62,9 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 ) (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
-) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
+) (/usr/share/texlive/texmf-dist/tex/latex/comment/comment.sty
+\CommentStream=\write3
+ Excluding comment 'comment') (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2020-02-03 L3 backend support: dvips
 \l__pdf_internal_box=\box63
 \g__pdf_backend_object_int=\count178
@@ -74,85 +76,86 @@ File: l3backend-dvips.def 2020-02-03 L3 backend support: dvips
 ) (out/fujiwara_robomech.aux)
 \openout1 = `fujiwara_robomech.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for JY1/mc/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
+LaTeX Font Info:    Checking defaults for JT1/mc/m/n on input line 9.
+LaTeX Font Info:    ... okay on input line 9.
 LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <14.4> not available
-(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 46.
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 46.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <14.4> not available
-(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 46.
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <14.4> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 46.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <12> not available
-(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 46.
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 46.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <12> not available
-(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 46.
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <12> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 46.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 47.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 46.
+(Font)              <7> on input line 47.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 46.
+(Font)              <5> on input line 47.
 
 
 LaTeX Font Warning: Font shape `JT1/mc/m/it' undefined
-(Font)              using `JT1/mc/m/n' instead on input line 46.
+(Font)              using `JT1/mc/m/n' instead on input line 47.
 
 
 LaTeX Font Warning: Font shape `JY1/mc/m/it' undefined
-(Font)              using `JY1/mc/m/n' instead on input line 46.
+(Font)              using `JY1/mc/m/n' instead on input line 47.
 
 
 LaTeX Font Warning: Font shape `JT1/mc/b/it' undefined
-(Font)              using `JT1/mc/b/n' instead on input line 46.
+(Font)              using `JT1/mc/b/n' instead on input line 47.
 
 LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <9> not available
-(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 46.
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <9> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 46.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 47.
 
 LaTeX Font Warning: Font shape `JY1/mc/b/it' undefined
-(Font)              using `JY1/mc/b/n' instead on input line 46.
+(Font)              using `JY1/mc/b/n' instead on input line 47.
 
 LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <9> not available
-(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 46.
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <9> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 46.
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `JT1/mc/b/n' in size <10> not available
-(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 51.
+(Font)              Font shape `JT1/mc/bx/n' tried instead on input line 52.
 LaTeX Font Info:    Font shape `JT1/mc/bx/n' in size <10> not available
-(Font)              Font shape `JT1/gt/m/n' tried instead on input line 51.
+(Font)              Font shape `JT1/gt/m/n' tried instead on input line 52.
 LaTeX Font Info:    Font shape `JY1/mc/b/n' in size <10> not available
-(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 51.
+(Font)              Font shape `JY1/mc/bx/n' tried instead on input line 52.
 LaTeX Font Info:    Font shape `JY1/mc/bx/n' in size <10> not available
-(Font)              Font shape `JY1/gt/m/n' tried instead on input line 51.
-File: road.png Graphic file (type bmp)
-<road.png>
+(Font)              Font shape `JY1/gt/m/n' tried instead on input line 52.
+
+Underfull \vbox (badness 3803) has occurred while \output is active []
+
 File: system.png Graphic file (type bmp)
 <system.png>
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Underfull \vbox (badness 1297) has occurred while \output is active []
 
-[1
+ [1
 
 
 
@@ -161,28 +164,18 @@ File: system2.png Graphic file (type bmp)
 <system2.png>
 File: network.png Graphic file (type bmp)
 <network.png>
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 131.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 131.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
-
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 120.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 120.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: gamma3.png Graphic file (type bmp)
 <gamma3.png>
 File: tsudanuma2.png Graphic file (type bmp)
 <tsudanuma2.png>
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 File: 60000step_real2.png Graphic file (type bmp)
 <60000step_real2.png>
 
@@ -193,25 +186,38 @@ File: 10000step.png Graphic file (type bmp)
 <10000step.png>
 File: hist.png Graphic file (type bmp)
 <hist.png>
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 File: 10000step_act1.0.png Graphic file (type bmp)
 <10000step_act1.0.png>
- [3]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 File: 3action3.png Graphic file (type bmp)
 <3action3.png>
- [4
+[3]
+File: 10000step_act1.5_2.png Graphic file (type bmp)
+<10000step_act1.5_2.png>
+File: real_result.png Graphic file (type bmp)
+<real_result.png>
 
-] (out/fujiwara_robomech.aux)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[4] (out/fujiwara_robomech.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 1154 strings out of 481768
- 16498 string characters out of 5933620
- 262228 words of memory out of 5000000
- 16571 multiletter control sequences out of 15000+600000
- 544206 words of font info for 70 fonts, out of 8000000 for 9000
+ 1205 strings out of 481768
+ 17398 string characters out of 5933620
+ 264109 words of memory out of 5000000
+ 16615 multiletter control sequences out of 15000+600000
+ 544543 words of font info for 71 fonts, out of 8000000 for 9000
  929 hyphenation exceptions out of 8191
- 30i,15n,25p,760b,361s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,15n,25p,760b,359s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on out/fujiwara_robomech.dvi (4 pages, 27772 bytes).
+Output written on out/fujiwara_robomech.dvi (4 pages, 34140 bytes).

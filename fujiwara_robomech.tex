@@ -3,45 +3,46 @@
 \usepackage[dvipdfmx]{graphicx}
 \usepackage{here}
 \usepackage{url}
+\usepackage{comment}
 % \usepackage{multirow}
 
 \begin{document}
 \makeatletter
 \title{視覚と行動の end-to-end 学習により経路追従行動を\\オンラインで模倣する手法の提案}
-{―目標方向による経路選択機能の追加と検証―}
+{―実環境における経路選択機能の検証と学習時間の短縮化の検討―}
 {A proposal for an online imitation method of path-tracking
 behavior by end-to-end\\ learning of vision and action}
-{-Addition and verification of path selection function by target direction-}
+{-Verification of route selection function in a real environment and study of reducing learning time-}
 
 \author{
-\begin{tabular}{ll}
- \hspace{1zw}○学\hspace{1zw} 藤原柾(千葉工大)& \hspace{1zw} 馬場琉生(千葉工大)\\
-%  \hspace{1zw}髙橋佑樹(千葉工大)& \hspace{1zw} 春山健太(千葉工大)\\
- \hspace{2zw}正\hspace{1zw}上田隆一(千葉工大)& 正\hspace{1zw}林原靖男(千葉工大)\\
+% \centering
+\begin{tabular}{lll}
+ \centering
+ \hspace{1zw}○学\hspace{0.7zw} 藤原柾(千葉工大)&\hspace{0.5zw}学\hspace{1zw}春山健太(千葉工大)
+ \hspace{2zw}馬場琉生(千葉工大)\\
+%  \hspace{4zw}馬場琉生(千葉工大)&\hspace{4zw} \hspace{1.2zw} 高橋佑樹(千葉工大)\\
+%  \hspace{2zw}正\hspace{2zw}橋佑樹(千葉工大)& \hspace{1zw}春山健太(千葉工大)\\
+ \hspace{2zw}正\hspace{1zw}上田隆一(千葉工大)& \hspace{0.5zw}正\hspace{1zw}林原靖男(千葉工大)&\\
  % ※協賛・後援団体の会員資格で発表される場合は「正・学」は不要です。
  \end{tabular}
  % &\\
  \vspace{1zh} \\
  \begin{tabular}{l}
-{\small Masaki FUJIWARA, Chiba Institute of Technology, s19c1101ga@s.chibakoudai.jp
- }\\
- {\small Ryusei BABA, Yuki TAKAHASHI, Kenta HARUYAMA,}\\
- {\small Ryuichi UEDA and Yasuo HAYASHIBARA, Chiba Institute of Technology}\\
+{\small Masaki FUJIWARA, Chiba Institute of Technology, s19c1101ga@s.chibakoudai.jp}\\
+{\small Kenta HARUYAMA, Ryusei BABA,}\\
+% {\small Kenta HARUYAMA, Ryusei BABA, Yuki TAKAHASHI,}\\
+{\small Ryuichi UEDA and Yasuo HAYASHIBARA, Chiba Institute of Technology}\\
 %  {\small [Authors' names and Affiliations: Times New Roman, 9pt]}
 \end{tabular}
 }
 \makeatother
 
 \abstract{ \small 
-We have proposed an online imitation method for path-following behavior based on end-to-end learning of vision
-and action. However, the proposed method aims to follow a fixed path and cannot dynamically select a path to make a
-robot move to a destination. In this study, we add a function to select a path to the method so that the robot can move
-to an arbitrary destination. We introduce the online imitation learning method with the additional function of selecting
-a path, and then verify whether the system can select a path by experiments using a simulator.
+We have proposed an online imitation method of path-following behavior by end-to-end learning of visual actions. However, the proposed method aims at orbiting a fixed path and cannot dynamically change the path in order to move the robot to the destination. Therefore, in this study, we add a route selection function so that the robot can move to any destination. We attempt to solve the problem of long learning time, which was identified through preliminary experiments in a real environment, by trying two approaches. In addition, we will verify the effectiveness of the route selection function through experiments in a real environment.
 }
 
 \date{} % 日付を出力しない
-\keywords{Autonomous mobile robot, Navigation, End-to-end learning, Target direction}
+\keywords{Autonomous mobile robot, Navigation, End-to-end learning}
 
 \maketitle
 \thispagestyle{empty}
@@ -49,26 +50,34 @@ a path, and then verify whether the system can select a path by experiments usin
 
 \small
 \section{緒言}%===========================
-我々は, 入力データから出力を直接生成するend-to-end学習により, 経路追従行動をロボットの視覚に当たるカメラ画像に基づいてオンラインで模倣する手法を提案し, 有効性を実験により検証してきた\cite{okada1}\cite{okada2}（以下, 「従来手法」と称する）. 加えて, この岡田らの従来手法に経路を選択する機能の追加を提案し, シミュレータ上での実験により, 有効性を検証してきた\cite{mech}. 本稿では, 経路選択機能に関する実験をシミュレータ上から実環境に移す際に, 問題となった学習時間の長さについて, 2つのアプローチにより解決を図る. さらに, 実環境において経路選択機能の有効性を検証することを目的とする.
-\par
-従来手法は, 測域センサやオドメトリなどを入力とする地図を用いたルールベース制御器による走行を模倣学習し, 似た行動を画像を用いて行う手法である. なお, 地図を用いたルールベース制御器は, ROS Navigation\_stack\cite{nav}へ目標位置(waypoint)の指示を行うwaypoint\_nav\cite{waypoint}を組み合わせたものである. この手法は, 多くの研究\cite{bojarski}\cite{moridian}\cite{hawke}が人間のドライバーが操作するステアリング角度と前方カメラ画像を用いて模倣学習を行っていたのに対して, オンラインで自動的にデータセットを収集して模倣学習を行う点で異なっているといえる.
-\par
-この手法は, 学習を行った一定の経路を走行できるが, 目的地に対して経路を動的に選択して走行することはできない. それをするためには, ネットワークの入力に新たな要素の追加が必要となる. そのため, ネットワークへ新たな要素を追加し, \reffig{fig: fig1}のような分岐路において, 任意の経路を選択する機能の追加を検討した.
-\par
-カメラ画像とステアリング角度に, 条件を加えて学習を行う条件付き模倣学習の研究は, 現在までにいくつか行われている. Felipeら\cite{felipe}は前方カメラ画像, ステアリング角度, 角速度と「continue」, 「left」, 「straight」, 「right」からなるコマンドを入力としたネットワークを用いて模倣学習を行った. そして, 実環境と都市環境のシミュレータ上で, 模倣学習のテスト時においてもコマンドによって制御可能であることを確認している. また, Hawkeら\cite{hawke}は3つの前方カメラ画像と「go straight」, 「turn left」, 「turn right」からなるコマンドを入力とする構造のモデルを用いて, 実環境での複雑な都市環境というシナリオで, 意思決定が可能なモデルをわずか30時間の学習データで学習可能であることを示している.
-\par
-そこで本稿では, 従来から提案する経路追従行動を模倣する手法に対して, 条件を加えることで経路を選択する機能の追加を試みる. これにより, 模倣学習のテスト時においても, \reffig{fig: fig1}のような分岐路で, 
-「直進」, 「左折」などのコマンドによる制御で任意の経路への移動を可能にすることを目指す.
+我々は, 入力データから出力を直接生成するend-to-end学習により, 経路追従行動をロボットの視覚に当たるカメラ画像に基づいてオンラインで模倣する手法を提案し, 有効性を実験により検証してきた\cite{okada1}\cite{okada2}（以下, 「従来手法」と称する）. 加えて, この岡田らの従来手法に経路を選択する機能の追加を提案し, シミュレータ上での実験により, 有効性を検証してきた\cite{mech}. 
+% 本稿では, 経路選択機能に関する実験をシミュレータ上から実環境に移す際に, 問題となった学習時間の長さについて, 2つのアプローチにより解決を図る. さらに, 実環境において経路選択機能の有効性を検証することを目的とする.
+従来手法は, 測域センサやオドメトリなどを入力とする地図を用いたルールベース制御器による走行を模倣学習し, 似た行動を画像を用いて行う手法である. なお, 地図を用いたルールベース制御器は, ROS Navigation\_stack\cite{nav}へ目標位置(waypoint)の指示を行うwaypoint\_nav\cite{waypoint}を組み合わせたものである. この手法は, 多くの研究\cite{bojarski}\cite{moridian}\cite{hawke}が人間のドライバーが操作するステアリング角度を用いて模倣学習を行っていたのに対して, オンラインで自動的にデータセットを収集して模倣学習を行う点で異なっているといえる.
 
-\vspace{3mm}
+この手法は, 学習を行った一定の経路を走行できるが, 目的地に対して経路を動的に選択して走行することはできない. それをするためには, ネットワークの入力に新たな要素の追加が必要となる. 
+新たな要素として, カメラ画像とステアリング角度に条件を加えて学習を行う条件付き模倣学習の研究が現在までにいくつか行われている. Felipeら\cite{felipe}やHawkeら\cite{hawke}は, 前方カメラ画像に加えて方向を指示するコマンドを入力とするネットワークを用いて模倣学習を行った. そのため, 前報\cite{mech}ではネットワークへ条件を追加し, 分岐路において任意の経路を選択する機能の追加を提案した. また, 実験により有効性を検証した. しかし, 有効性の検証はシミュレータ上のみでしか確認しておらず, 実環境においては未確認であった. 
 
-\begin{figure}[h]
- \centering
-  \includegraphics[height=30mm]{road.png}
-  \vspace*{-4mm}
-  \caption{A fork in the road where the direction of moving is not unique}
-  \label{fig: fig1}
-\end{figure}
+そこで本稿では, 前報\cite{mech}で追加した経路選択機能の有効性を実環境において検証する. さらに, 実験で問題となった学習時間の長さについて, 2つのアプローチにより学習時間を短縮することを目的とする.
+
+条件付き模倣学習により, 学習済みモデルによる走行時において経路を制御できるようになると, 自律走行を行う手段が地図を用いたルールベース制御器と模倣学習など, 複数持つことができる. たとえば, 自律走行の手段を切り替えることでロバスト性の向上が期待できる.
+% また, 実環境における実験のための学習時間の短縮化の検討を行う.
+% \par
+% カメラ画像とステアリング角度に, 条件を加えて学習を行う条件付き模倣学習の研究は, 現在までにいくつか行われている. Felipeら\cite{felipe}は前方カメラ画像, ステアリング角度, 角速度と「continue」, 「left」, 「straight」, 「right」からなるコマンドを入力としたネットワークを用いて模倣学習を行った. そして, 実環境と都市環境のシミュレータ上で, 模倣学習のテスト時においてもコマンドによって制御可能であることを確認している. また, Hawkeら\cite{hawke}は3つの前方カメラ画像と「go straight」, 「turn left」, 「turn right」からなるコマンドを入力とする構造のモデルを用いて, 実環境での複雑な都市環境というシナリオで, 意思決定が可能なモデルをわずか30時間の学習データで学習可能であることを示している.
+% \par
+% そこで本稿では, 従来から提案する経路追従行動を模倣する手法に対して, 条件を加えることで経路を選択する機能の追加を試みる. これにより, 模倣学習のテスト時においても, \reffig{fig: fig1}のような分岐路で, 
+% 「直進」, 「左折」などのコマンドによる制御で任意の経路への移動を可能にすることを目指す.
+
+% \vspace{3mm}
+
+% \begin{figure}[H]
+%  \centering
+%   \includegraphics[height=30mm]{road.png}
+%   \vspace*{-4mm}
+%   \caption{A fork in the road where the direction of moving is not unique}
+%   \label{fig: fig1}
+% \end{figure}
+
+% \vspace{-4mm}
 
 \section{従来手法}
 岡田らの従来手法に関して紹介する. \reffig{fig: fig2}に経路追従行動を視覚に基づいてオンラインで模倣するシステムを示す. 手法は機械学習により, 学習器の訓練を行う「学習フェーズ」と訓練した結果を検証する「テストフェーズ」に分かれる.
@@ -79,7 +88,7 @@ a path, and then verify whether the system can select a path by experiments usin
 \subsection{テストフェーズ}
 テストフェーズは, 訓練後の学習結果を評価するフェーズである. 学習器にカメラ画像を入力し, 出力されるヨー方向の角速度を用いて自律走行する.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
    \includegraphics[width=85mm]{system.png}
    \vspace*{-4mm}
@@ -90,7 +99,7 @@ a path, and then verify whether the system can select a path by experiments usin
 \section{経路選択機能の追加}
 経路選択機能の追加を目的として, データセットと学習器の入力へ, 目標とする進行方向(以下, 「目標方向」と称する)を追加する. なお, 追加した要素以外は従来手法と同様である. \reffig{fig: fig3}に提案手法のシステムを示す. 学習フェーズでは, 地図を用いたルールベース制御器で自律走行しながら, 角速度, カメラ画像に新たに目標方向をデータセットに加える. テストフェーズでは, 学習器にカメラ画像に加えて目標方向を外部から入力する. 本稿では議論しないが, 最終的に目的地までカメラ画像のみで自律走行させることを目標としているため, 目標方向を自動的に作成する仕組みが必要となる. これに関しては, カメラ画像からトポロジカルマップのどのノード上に到達したかを判定し, 目標方向を自動的に切り替えるパッケージを作成している\cite{graph}.
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
    \includegraphics[width=85mm]{system2.png}
    \vspace*{-4mm}
@@ -100,7 +109,9 @@ a path, and then verify whether the system can select a path by experiments usin
 
 \section{ネットワークとデータ形式}
 \reffig{fig: fig4}に経路選択機能を追加したネットワーク, \reftab{tbl: table1}にハイパーパラメータを示す. 
-先行研究に倣って, 前報で用いたネットワークの出力部へ2つの層を追加した. この層に目標方向として, \reftab{tbl: table2}のワンホットベクトルで表されるデータを入力する. なお, 前報\cite{mech}では「Continue」, 「Go straight」, 「Turn left」, 「Turn right」からなる4つのコマンドを用いていたが, 「Continue」と「Go straight」のコマンドに対応する行動がほぼ同一であったため, 本稿ではコマンドを1つ減らし, 3コマンドとしている. 
+先行研究に倣って, 前報で用いたネットワークの出力部へ2つの層を追加した. この層に目標方向として, \reftab{tbl: table2}
+% のワンホットベクトルで
+に表されるデータを入力する. なお, 前報\cite{mech}では「Continue」, 「Go straight」, 「Turn left」, 「Turn right」からなる4つのコマンドを用いていたが, 「Continue」と「Go straight」のコマンドに対応する行動がほぼ同一であったため, 本稿ではコマンドを1つ減らし, 3コマンドとしている. 
 % \reffig{fig: fig5}はそれぞれの進行方向を示している.
 
 \begin{figure}[h]
@@ -144,9 +155,9 @@ a path, and then verify whether the system can select a path by experiments usin
  \begin{tabular}{|c|c|}
   \hline
 	Target direction & Data \\\hline
-  Go straight & [1, 0, 0] \\\hline
-  Turn left & [0, 1, 0] \\\hline
-  Turn right & [0, 0, 1] \\
+  Go straight & [100, 0, 0] \\\hline
+  Turn left & [0, 100, 0] \\\hline
+  Turn right & [0, 0, 100] \\
   \hline
  \end{tabular}
 \end{table}
@@ -176,7 +187,7 @@ a path, and then verify whether the system can select a path by experiments usin
  \end{figure}
 
  \subsection{実験方法}
- \reffig{fig: fig7}に示すような A,B の三叉路で全ての侵入方向と抜け出す経路を含めるように, 前報\cite{mech}の実験2と同様の経路を繰り返し走行させる. 学習を60000step実行後, テストフェーズに移行する. テストフェーズでは, 学習フェーズと同様の経路を, 目標方向による制御によって正しく走行できるか評価する. しかし, 実験を行ったのは1回のみである. 実験が1回のみなのは, 学習時間の長さが問題になったためである. 具体的には, 実験におよそ7時間を要し, バッテリなどの関係で1日に1, 2時間が限界であったため, 1回の実験に1週間かけて行う必要があった.
+ \reffig{fig: fig7}に示すようなA,Bの三叉路で全ての侵入方向と抜け出す経路を含めるように, 前報\cite{mech}の実験2と同様の経路を繰り返し走行させる. 学習を60000step実行後, テストフェーズに移行する. テストフェーズでは, 学習フェーズと同様の経路を, 目標方向による制御によって正しく走行できるか評価する. しかし, 実験を行ったのは1回のみである. 実験が1回のみなのは, 学習時間の長さが問題になったためである. 具体的には, 実験におよそ7時間を要し, バッテリなどの関係で1日に1, 2時間が限界であったため, 1回の実験に1週間かけて行う必要があった.
 
  \begin{figure}[h]
   \centering
@@ -191,7 +202,7 @@ a path, and then verify whether the system can select a path by experiments usin
 
 \begin{figure}[h]
   \centering
-   \includegraphics[width=85mm]{60000step_real2.png}
+   \includegraphics[width=80mm]{60000step_real2.png}
    \vspace*{-4mm}
    \caption{Number of times a correct path was selected}
    \label{fig: fig8}
@@ -200,11 +211,11 @@ a path, and then verify whether the system can select a path by experiments usin
 \section{学習時間の短縮化の提案}
 \subsection{問題}
 % 前章で述べたように, シミュレータ上での実験により提案手法が有効だと
-前報\cite{mech}で行った実験により, シミュレータ上では提案手法が有効だと確認している. そのため, 述べたように, 実環境における提案手法の有効性を検証することを試みた. しかし, 学習時間の長さが問題となり, 評価を複数回行うことが困難であった. そのため, 学習時間の短縮化に関して2つのアプローチを提案し, 学習時間の削減の効果を実験により確認する.
+前報\cite{mech}で行った実験により, シミュレータ上では提案手法が有効だと確認している. そのため, 5章で述べたように, 実環境における提案手法の有効性を検証することを試みた. しかし, 学習時間の長さが問題となり, 評価を複数回行うことが困難であった. そのため, 学習時間の短縮化に関して2つのアプローチを提案し, 学習時間の削減の効果を実験により確認する.
 
 \subsection{学習ステップ数の削減による影響}
 前報\cite{mech}のシミュレータ上で行った実験2と同様の条件で, 60000stepから10000stepに学習ステップ数を変更し, 実験を行った.
-\par 
+% \par 
 実験結果を\reffig{fig: fig9}に示す. \reftab{tbl: table3}に侵入方向ごとの成功回数を合計した結果を示す.
 表に示すように, 87/120回 正しい経路を選択する様子が見られた.
 \par
@@ -217,6 +228,8 @@ a path, and then verify whether the system can select a path by experiments usin
    \caption{Number of times a correct path was selected}
    \label{fig: fig9}
  \end{figure}
+
+ \vspace{-8mm}
 
  \begin{table}[H]
   \caption{Experimental results}
@@ -234,23 +247,24 @@ a path, and then verify whether the system can select a path by experiments usin
  \end{table}
 
 \subsection{アプローチ1：データセットに加えるデータの割合の変更}
-6.2章における10000stepあたりのコマンドのデータ数を\reffig{fig: fig10}に示す. \reffig{fig: fig10}(a)より, 直進コマンドのデータ数が圧倒的に多いことが分かる. このデータ数の偏りを解消するため, \reffig{fig: fig10}(b)に示すように, 左折と右折コマンドのデータ数を7倍にする. なお, データ数を何倍にするのが望ましいのか本稿では議論しない. 実験により, データセットに加えるデータ数の割合の変更が有効か検証する.
+6.2章の実験における10000stepあたりのコマンドのデータ数を\reffig{fig: fig10}に示す. \reffig{fig: fig10}(a)より, 直進コマンドのデータ数が圧倒的に多く, 不均衡データであることが分かる.
+不均衡データを調査したHaiboら\cite{haibo}によると, ほとんどの標準的な学習アルゴリズムがデータの不均衡により, パフォーマンスが大幅に低下すると述べている. そのため, オーバーサンプリングを行い, データの偏りを改善する. \reffig{fig: fig10}(b)に示すように, 左折と右折コマンドのデータを7倍に複製し, データセットへ加える. なお, データを何倍にするのが望ましいのか本稿では議論しない. 実験により, データセットに加えるデータ数の割合の変更が有効か検証する.
 
 \begin{figure}[h]
   \centering
    \includegraphics[width=87mm]{hist.png}
-   \vspace*{-4mm}
-   \caption{Number of times a correct path was selected}
+   \vspace*{-6mm}
+   \caption{Number of data per command per 10000steps in conventional experiments}
    \label{fig: fig10}
  \end{figure}
 
-\subsection{実験装置}
+\subsubsection{実験装置}
 前報\cite{mech}で行った実験2のシミュレータ環境とロボットで実験を行った.
 
-\subsection{実験方法}
+\subsubsection{実験方法}
 前報\cite{mech}の実験2と同様の経路を繰り返し走行させる. 学習を10000step実行後, テストフェーズに移行し, 評価する. この一連の流れを10回行う.
 
-\subsection{実験結果}
+\subsubsection{実験結果}
 実験結果を\reffig{fig: fig11}に示す. \reftab{tbl: table4}に侵入方向ごとの成功回数を合計した結果を示す. 表に示すように, 99/120回 正しい経路を選択する様子が見られた. 6.2章の学習ステップ数を減らした結果と比べると成功率は高いが, 60000stepの実験と成功率を比較すると約12\%ほど差があり, アプローチ1を試みた結果では成功率が高いとは言い難いため, 次にアプローチ2を試みる.
 
 \begin{figure}[h]
@@ -260,6 +274,8 @@ a path, and then verify whether the system can select a path by experiments usin
    \caption{Number of times a correct path was selected}
    \label{fig: fig11}
  \end{figure}
+
+ \vspace{-8mm}
 
  \begin{table}[H]
   \caption{Experimental results}
@@ -289,6 +305,78 @@ a path, and then verify whether the system can select a path by experiments usin
    \caption{Robot behavior}
    \label{fig: fig12}
  \end{figure}
+
+\subsubsection{実験装置}
+前報\cite{mech}で行った実験2のシミュレータ環境とロボットで実験を行った.
+
+\subsubsection{実験方法}
+6.3章と同様の条件で実験を行った.
+
+\subsubsection{実験結果}
+実験結果を\reffig{fig: fig13}に示す. \reftab{tbl: table5}に侵入方向ごとの成功回数を合計した結果を示す.
+表に示すように, 109/120回 正しい経路を選択する様子が見られた. 
+
+\begin{figure}[h]
+  \centering
+   \includegraphics[width=85mm]{10000step_act1.5_2.png}
+   \vspace*{-4mm}
+   \caption{Number of times a correct path was selected}
+   \label{fig: fig13}
+ \end{figure}
+
+ \vspace{-8mm}
+
+ \begin{table}[H]
+  \caption{Experimental results}
+  \label{tbl: table5}
+  \centering
+  \footnotesize
+  \vspace{2mm}
+  \begin{tabular}{|c|c|c|}
+   \hline
+   Experiment & Step & Total results \\\hline
+   Exp.2 from \cite{mech} & 60000 & 113/120(94.2\%) \\ \cline{2-3}
+  & 10000 & 87/120(72.5\%)\\\hline
+  Data 7 times & 10000 & 99/120(82.5\%)\\\hline
+  Aggressive meandering & 10000 & 109/120(90.8\%) \\ \cline{2-3}
+  & 20000 & 114/120(95\%)\\
+   \hline
+  \end{tabular}
+ \end{table}
+
+ 6.3章のデータの割合の変更した結果と比べると成功率が改善していることが分かる. 以下に\reffig{fig: fig13}における成功率が低い場所と要因を示す.
+
+ \begin{itemize}
+  \item f7\\
+  前報\cite{mech}で行った実験2と同様に, 予め設定した経路の最後であるため, データセットにf7のデータが加えられてから十分に学習がされていないおそれがある.
+  \item a7, b3, e1\\
+  これらは, 全て右折する場所である. \reffig{fig: fig10}より, 他のコマンドのデータと比較して右折コマンドのデータが少ないことが分かる. このことから, 右折コマンドのデータを十分に学習できていないおそれがある. 
+ \end{itemize}
+ 
+この2つの点から, 学習ステップ数を増やすと成功率が改善する可能性がある. そのため, 10000stepから20000stepに学習ステップ数を増やして実験した. 実験結果は, \reftab{tbl: table5}に示すように成功回数が 114/120回(95\%)となり, 成功率が60000stepの実験と同程度になった. このことから, 学習時間を短縮するための2つのアプローチにより, 学習のステップ数が約67\%削減できたといえる.
+
+\subsection{実環境の実験}
+5章で行った実験に2つのアプローチを追加して実験を行った. 実験装置は5章と同様である.
+
+% \subsubsection{実験装置}
+% 5.1章で示した環境とロボットで実験を行った.
+
+\subsubsection{実験方法}
+シミュレータ上で, まずは学習を10000step行い, その学習器を実環境でファインチューニングする. 学習フェーズでは, 前報\cite{mech}の実験2と同様の経路を繰り返し走行させる. 学習を10000step実行後, テストフェーズに移行し, 評価する. この一連の流れを10回行う.
+
+\subsection{実験結果}
+実験結果を\reffig{fig: fig14}に示す. 目標方向に従って 78/120回(65\%) 正しい経路を選択する様子が見られた. 前章までに行ってきたシミュレータ上での実験では, 成功率が90\%を超えていたが, 実環境での成功率は65\%と低かった. なお, 成功率が低い原因の解明には未だ至っていない. この問題の検討は, 今後の課題となっている.
+
+\begin{figure}[h]
+  \centering
+   \includegraphics[width=85mm]{real_result.png}
+   \vspace*{-4mm}
+   \caption{Number of times a correct path was selected}
+   \label{fig: fig14}
+ \end{figure}
+
+\section{結言}
+本稿では, 経路追従行動をカメラ画像を用いた end-to-end 学習で模倣する岡田らの従来手法をベースに, データセットと学習器の入力へ目標方向を加えることで, 経路選択をする機能の追加を提案した. また, シミュレータ上での実験を実環境に移す際に, 問題となった学習時間の長さについて, 2 つのアプローチを試みることで学習時間を約67\%削減した. 加えて, 実環境での実験を行い, 有効性の検証を行った. 実験結果より, 学習器へ目標方向を与えることで, 指定した経路へ走行する挙動が確認できた.
 
 % 本文：明朝体・9pt（欧文Times New Roman, 9pt）、文字間隔は１行26文字程度、行間隔は4.2mm程度にして下さ	い。
 
@@ -399,6 +487,9 @@ weighted\_graph レポジトリ. \\\url{https://github.com/masakifujiwara1/weigh
 \bibitem{kiyooka}
 清岡優祐, 岡田眞也, 岩井一輝, 上田隆一, 林原靖男, “視覚と行動の end-to-end 学習により経路追従行動をオンラインで模倣する手法の提案―
 データセットと生成された経路追従行動の解析 ―”, 計測自動制御学会 SI 部門講演会 SICE-SI2021 予稿集, pp.1071–1075(2021)
+
+\bibitem{haibo}
+He, Haibo, and Edwardo A. Garcia. ”Learning from imbalanced data.” IEEE Transactions on knowledge and data engineering 21.9 (2009): 1263-1284.
 
 \end{thebibliography}
 
